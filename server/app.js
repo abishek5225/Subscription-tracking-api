@@ -4,7 +4,7 @@ import {PORT} from './config/env.js'
 const app = express();
 
 app.get('/', (req, res) => {
-    res.send('welcome to the subscription tracker');
+    res.send('welcome to the subscription tracker API');
 })
 
 app.listen(PORT , () => {
