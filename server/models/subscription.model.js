@@ -1,28 +1,60 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const subscriptionSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Name is required"],
+        required: [true, "Subscription is required"],
         trim: true,
         minLength: 4,
         maxLength: 15,
     },
-    email: {
-        type: String,
-        required: [true, "Email is required"],
-        unique: true,
+    price: {
+        type: Number,
+        required: [true, "Price is required"],
         trim: true,
-        lowercase: true,
-        match : [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Please fill a valid email address"],      
+        min: [0, "Price must be greater than 0"],
     },
-    password: {
+    currency:{
+        type:String,
+        enum: ['USD', 'EUR', 'NPR'],
+        default: 'USD',
+    },
+
+    frequency:{
         type: String,
-        required: [true, "Password is required"],
-        minLength: 8,
-    }
-}, {timestamps: true});
+        enum: ['daily', 'weekly', 'monthly', 'yearly'],
+        default: 'monthly',
+    },
+    category: {
+        type: String,
+        enum: ['food', 'clothing', 'rent', 'entertainment', 'other'],
+        required: [true, "Category is required"],
+    },
+    paymentMethod: {
+        type: String,
+        enum: ['esewa', 'khalti', 'MobileBanking', 'cash'],
+        required: [true, "Payment method is required"],
+    },
+    status: {
+        type: String,
+        enum: ['active', 'inactive'],
+    },
+    startDate: {
+        type: Date,
+        required: [true, "Start date is required"],
+        validate: (value) => {
+              value <= new Date(),
+                "Start date must be in the past";
+        }
+    },
+    renewalDate: {
+        type: Date,
+        required: [true, "Renewal date is required"],
+        validate: (value) => {
+         return value >= this.startDate,
+                "Renewal date must be in the future";
+        }
+    },
 
-const User = mongoose.model("User", userSchema);
 
-export default User;
+}, { timestamps: true });
