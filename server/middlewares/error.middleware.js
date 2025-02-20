@@ -23,9 +23,17 @@ const errorMIddleware = (err, req, res, next)=>{
         }
 
         //mongoose validation error
-        
+        if(err.name === 'ValidationError'){
+            const message = Object.values(err.errors).map(val => val.message);
+            error = new Error(message.join(', '));
+            error.status = 400;
+        }
+        res.status(error.status || 500).json({
+            success: false, 
+            error: error.message || 'server error'
+        })
     }catch(error){
         next(error)
     }
-
 }
+export default errorMIddleware;
