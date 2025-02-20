@@ -7,7 +7,7 @@ subscriptionRouter.get('/', (req, res)=>{
 })
 
 subscriptionRouter.get("/:id", (req, res) => {
-  res.send({ title: "GET subscriptions details" });
+  res.send({ title: "GET subscriptions detail" });
 });
 
 subscriptionRouter.post("/", (req, res) => {
