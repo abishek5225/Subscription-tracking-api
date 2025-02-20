@@ -3,7 +3,7 @@ import { Router } from "express";
 const subscriptionRouter = Router();
 
 subscriptionRouter.get('/', (req, res)=>{
-    res.send({title : 'GET all subscriptions'})
+    res.send({title : 'GET all subscription'})
 })
 
 subscriptionRouter.get("/:id", (req, res) => {
