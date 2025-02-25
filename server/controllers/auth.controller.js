@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 
 import User from '../models/user.model.js'
@@ -30,7 +31,19 @@ export const signUp= async(req, res, next)=>{
         { session }
       );
 
+      const token = jwt.sign({userId: newUsers[0]._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN})
+
       await session.commitTransaction();
+      session.endSession();
+
+      res.status(201).json({
+        success: true,
+        message: 'User created successfully',
+        data:{
+            token,
+            user: newUsers[0],
+        }
+      })
     }catch(error){  //this means if at any point something went wrong then don't do anything and abort the transaction
         await session.abortTransaction()
         session.endSession()
