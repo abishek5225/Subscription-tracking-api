@@ -21,7 +21,7 @@ export const signUp= async(req, res, next)=>{
         error.statusCode(409);
         throw error;
       }
-
+      
       //Hash password with bcrypt
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
